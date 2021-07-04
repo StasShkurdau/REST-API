@@ -4,18 +4,17 @@ import com.example.Speedrun.REST.API.DTO.AddPersonDTO;
 import com.example.Speedrun.REST.API.model.Address;
 
 public interface AdminService {
-    String addPerson(AddPersonDTO addPersonDTO);
+    void addPerson(AddPersonDTO addPersonDTO);
 
     Address addAddress(String newAddress);
 
     void changeName(String oldName, String newName);
 
-    String deletePhoneNumbersByName(String name);
+    void changeAddressByName(String address, String name);
 
-    String changeAddressByName(String address);
+    void deletePerson(String name);
 
-    String deletePerson(String name);
+    void fillDB();
 
-    String deleteAddress(String address);
 
 }

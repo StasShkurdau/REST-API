@@ -20,7 +20,7 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-/*
+
     @PostMapping(path = "/addPerson")
     public ResponseEntity<Object> addPerson(@RequestBody AddPersonDTO personDTO){
         if(isNull(personDTO)){
@@ -30,10 +30,8 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-
- */
     @PostMapping(path = "/addAddress")
-    public ResponseEntity<Object> addAddress(@RequestBody String newAddress){
+    public ResponseEntity<Object> addAddress(@RequestParam String newAddress){
         if(isNull(newAddress)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -42,7 +40,7 @@ public class AdminController {
     }
 
     @PutMapping(path = "/changeName")
-    public ResponseEntity<Object> changeName(@RequestBody String oldName, String newName){
+    public ResponseEntity<Object> changeName(@RequestParam String oldName,@RequestParam String newName){
         if(isNull(oldName)||isNull(newName)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -50,7 +48,38 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PutMapping(path = "/changeAddress")
+    public ResponseEntity<Object> changeAddress(@RequestParam String address,@RequestParam String name){
+        if(isNull(address)||isNull(name)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        adminService.changeAddressByName(address, name);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
+    @DeleteMapping(path = "/deletePerson")
+    public ResponseEntity<Object> deletePerson(@RequestParam String name){
+        if(isNull(name)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        adminService.deletePerson(name);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/deleteAddress")
+    public ResponseEntity<Object> deleteAddress(@RequestParam String name){
+        if(isNull(name)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        adminService.deletePerson(name);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/fillDB")
+    public ResponseEntity<Object> fillDB(){
+        adminService.fillDB();
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 
 }

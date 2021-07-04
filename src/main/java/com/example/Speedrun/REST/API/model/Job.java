@@ -18,9 +18,6 @@ public class Job {
 
     private String job;
 
-    @OneToOne(optional=false, cascade=CascadeType.ALL)
-    private Person person;
-
     public Job() {
     }
 }

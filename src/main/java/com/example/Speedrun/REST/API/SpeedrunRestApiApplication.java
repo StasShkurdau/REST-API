@@ -8,6 +8,7 @@ public class SpeedrunRestApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpeedrunRestApiApplication.class, args);
+
 	}
 
 }

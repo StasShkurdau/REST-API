@@ -5,7 +5,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Entity
 @Getter
@@ -33,8 +36,11 @@ public class Person {
     @JoinColumn (name="person_id")
     private Address address;
 
-    public void setPhoneNumber(PhoneNumber newPhoneNumber){
-       phoneNumbers.add(newPhoneNumber);
+    public void addPhoneNumber(PhoneNumber newPhoneNumber) {
+        if (isNull(phoneNumbers)) {
+            phoneNumbers = new ArrayList<>();
+        }
+        phoneNumbers.add(newPhoneNumber);
     }
 
 }

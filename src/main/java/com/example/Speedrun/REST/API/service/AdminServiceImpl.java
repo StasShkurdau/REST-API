@@ -1,5 +1,6 @@
 package com.example.Speedrun.REST.API.service;
 
+import com.example.Speedrun.REST.API.AutoFillingOfDB;
 import com.example.Speedrun.REST.API.DTO.AddPersonDTO;
 import com.example.Speedrun.REST.API.model.Address;
 import com.example.Speedrun.REST.API.model.Person;
@@ -35,20 +36,19 @@ public class AdminServiceImpl implements  AdminService {
 
 
     @Override
-    public String addPerson(AddPersonDTO addPersonDTO) {
+    public void addPerson(AddPersonDTO addPersonDTO) {
 
         Person newPerson = new Person();
         Address address = addAddress(addPersonDTO.getAddress());
         newPerson.setAddress(address);
         PhoneNumber phoneNumber = addPhoneNumber(addPersonDTO.getPhoneNumber());
-        newPerson.setPhoneNumber(phoneNumber);
+        newPerson.addPhoneNumber(phoneNumber);
         Job newJob = new Job();
         newJob.setJob(addPersonDTO.getJob());
         newPerson.setJob(newJob);
         newPerson.setName(addPersonDTO.getName());
         personRepository.save(newPerson);
         LOGGER.info("Admin added person");
-        return null;
     }
 
 
@@ -75,28 +75,40 @@ public class AdminServiceImpl implements  AdminService {
 
     @Override
     public void changeName(String oldName, String newName) {
-        Long id = personRepository.getIdByName(oldName);
-        personRepository.updateNameById(id);
-        LOGGER.info("Admin change name from" + oldName + "to" + newName);
+        Person person = personRepository.getByName(oldName);
+        person.setName(newName);
+        personRepository.save(person);
+        LOGGER.info("Admin changed name from" + oldName + "to" + newName);
     }
 
     @Override
-    public String deletePhoneNumbersByName(String name) {
-        return null;
+    public void changeAddressByName(String addressName, String name) {
+        Person person = personRepository.getByName(name);
+        Address address = changeAddress(addressName);
+        person.setAddress(address);
+        personRepository.save(person);
+        LOGGER.info("Admin changed address of person" + name + " " + addressName);
     }
 
     @Override
-    public String changeAddressByName(String address) {
-        return null;
+    public void deletePerson(String name) {
+        personRepository.deleteByName(name);
+        LOGGER.info("Admin deleted person named" + name);
     }
 
     @Override
-    public String deletePerson(String name) {
-        return null;
+    public void fillDB() {
+        AutoFillingOfDB autoFillingOfDB = new AutoFillingOfDB(addressRepository,personRepository,phoneNumberRepository,jobRepository);
+        autoFillingOfDB.fillDB();
     }
 
-    @Override
-    public String deleteAddress(String address) {
-        return null;
+    private Address changeAddress(String addressName) {
+        Address address = addressRepository.getByAddress(addressName);
+        if(isNull(address)) {
+            throw new IllegalArgumentException("This address does not exist");
+        }
+        return address;
     }
+
+
 }

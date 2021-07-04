@@ -19,6 +19,6 @@ public class PhoneNumber {
 
     private String phoneNumber;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "phoneNumbers")
     private List<Person> persons;
 }
